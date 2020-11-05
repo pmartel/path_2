@@ -1,9 +1,18 @@
-
+// the timer code that drives the stepper motors is by Amanda Ghassaei
+//the robot code is by Jon Rosenfeld and Phil Martel
 
 //timer interrupts
 //by Amanda Ghassaei
 //June 2012
 //https://www.instructables.com/id/Arduino-Timer-Interrupts/
+// License from Amamda's code
+/*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or
+* (at your option) any later version.
+*
+*/
 
 //timer setup for timer0, timer1, and timer2.
 //For arduino uno or any board with ATMEL 328/168.. diecimila, duemilanove, lilypad, nano, mini...
@@ -13,18 +22,44 @@
 //timer1 will interrupt at 1Hz
 //timer2 will interrupt at 8kHz
 
-// steps/inch
-#define wheelDiameter 2.34
-#define degPerStep 11.25                  // deg per full step   /1/5.625  //5.625/64.0
-#define stepsPerRev (360/degPerStep)/64   // full steps per rev of output shaft
-#define inchPerStep (3.1415*wheelDiameter/stepsPerRev)     //degPerStep/360.0) 
-#define stepsPerInch 1./inchPerStep
-#define wheelBase 6.4   // d8stance between wheels
-#define stepsPerDegree (wheelBase*3.1415/inchPerStep)/360
+#include <Streaming.h> // This lets Serial use the C++ '<<' operator
+#define PHILS_ROBOT
 
+#ifdef JONS_ROBOT
+  // steps/inch
+  #define wheelDiameter 2.34
+  #define degPerStep 11.25                  // deg per full step   /1/5.625  //5.625/64.0
+  #define stepsPerRev (360/degPerStep)/64   // full steps per rev of output shaft
+  #define inchPerStep (3.1415*wheelDiameter/stepsPerRev)     //degPerStep/360.0) 
+  #define stepsPerInch 1./inchPerStep
+  #define wheelBase 6.4   // d8stance between wheels
+  #define stepsPerDegree (wheelBase*3.1415/inchPerStep)/360
+#endif
 
-//#define stepsPerQturn 5.75*stepsPerInch
-//#define stepsPerDegree stepsPerQturn/90.0
+#ifdef PHILS_ROBOT
+  // these dimensions (inches) are for Phil's robot
+  const float wheelDiameter = 1.625; 
+  const float wheelBase = 8.0;
+  // these are for the 28BYJ-48 stepper motor
+  const float stepsPerMotorRev = 32.0;
+  const float gearRatio = 64.0;
+  const float stepsPerWheelRev = stepsPerMotorRev * gearRatio;
+
+  const float pi = 3.14159; //guess what this is
+  const float rad2Deg = 180./pi;
+  
+  const float stepsPerInch = stepsPerWheelRev / (pi * wheelDiameter ) ;
+  const float degPerStep = ( 1./(stepsPerInch * (wheelBase/2))) * rad2Deg; // small angle approxomation
+  const float stepsPerDegree = 1./ degPerStep;
+/*  
+  #define degPerStep 11.25                  // deg per full step   /1/5.625  //5.625/64.0
+  #define stepsPerRev (360/degPerStep)/64   // full steps per rev of output shaft
+  #define inchPerStep (3.1415*wheelDiameter/stepsPerRev)     //degPerStep/360.0) 
+  #define stepsPerInch 1./inchPerStep
+  #define wheelBase 6.4   // d8stance between wheels
+  #define stepsPerDegree (wheelBase*3.1415/inchPerStep)/360
+*/
+#endif
 
 
 float test;
@@ -71,14 +106,10 @@ void setup(){
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }  // prints title with ending line break
-  test = wheelDiameter;
-  Serial.println(test, 10);  
-  test = degPerStep;
-  Serial.println(test, 10);  
-  test = inchPerStep;
-  Serial.println(test, 10);  
+  Serial << "wheelDiameter " << wheelDiameter << endl;  
+  Serial << "degPerStep " << degPerStep << endl;
   test = stepsPerInch;
-  Serial.println(test, 10);  
+  Serial << "stepsPerInch " << stepsPerInch << endl;
 
   //set pins as outputs
  pinMode(STEPPIN1, OUTPUT);
