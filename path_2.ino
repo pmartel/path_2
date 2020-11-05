@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 // the timer code that drives the stepper motors is by Amanda Ghassaei
 //the robot code is by Jon Rosenfeld and Phil Martel
-=======
-//phil
->>>>>>> 6958f574ab42770fffdb36b491e66171c2003fe9
 
 //timer interrupts
 //by Amanda Ghassaei
