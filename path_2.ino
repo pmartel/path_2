@@ -71,16 +71,8 @@ struct moveStruct
 // for constant array like this you don't need to specify a size,
 // it's implicit
 moveStruct moves[] = {  
-
-  {.mtype = LIN, .amount = 6}, 
-  {.mtype = ROT, .amount = 90.0}, 
-  {.mtype = LIN, .amount = 6}, 
-  {.mtype = ROT, .amount = 90.0}, 
-  {.mtype = LIN, .amount = 6}, 
-  {.mtype = ROT, .amount = 90.0}, 
-  {.mtype = LIN, .amount = 6}, 
-  {.mtype = ROT, .amount = 90.0}, 
-  {.mtype = ROT, .amount = 0.0} 
+  //#include "square.h"
+  #include "540ccw.h"
 };
 
 volatile unsigned int stepcnt;
