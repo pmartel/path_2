@@ -38,7 +38,7 @@
 
 #ifdef PHILS_ROBOT
   // these dimensions (inches) are for Phil's robot
-  const float wheelDiameter = 1.625; 
+  const float wheelDiameter = 1.5625; // measured on 11/7
   const float wheelBase = 8.0;
   // these are for the 28BYJ-48 stepper motor
   const float stepsPerMotorRev = 32.0;
@@ -52,7 +52,7 @@
   const float stepsPerInch = stepsPerWheelRev / (pi * wheelDiameter ) ;
   //const float degPerStep = ( 1./(stepsPerInch * (wheelBase/2))) * rad2Deg; // small angle approximation
   const float degPerStep = atan2( 1./(stepsPerInch), (wheelBase/2)) * rad2Deg; // exact
-  const float stepsPerDegree = 1./ degPerStep *90./85.;  //temporary fudge factor
+  const float stepsPerDegree = 1./ degPerStep;
 #endif
 
 ////////////////////////////////////////////////////////////////
@@ -72,14 +72,16 @@ struct moveStruct
 // it's implicit
 moveStruct moves[] = {  
   //#include "square.h"
-  #include "540ccw.h"
+  #include "yard.h"
+  //#include "540cw.h"
+  //#include "540ccw.h"
 };
 
 volatile unsigned int stepcnt;
 
 volatile byte waveform;
 volatile byte mask;
-volatile int freq;
+int freq;
 int n;
 int i;          // index
 volatile int d;
@@ -135,7 +137,7 @@ void setup(){
   pinMode(LEFT_DIR_PIN, OUTPUT);
   pinMode(ENPIN, OUTPUT);
   pinMode(TESTPIN, OUTPUT);
-  freq = 150;
+  freq = 200;
  
   cli();//stop interrupts
 

@@ -1,4 +1,4 @@
 
-// Jon's move structure for a square
+// 1.5 turns clockwise
   {.mtype = ROT, .amount = 540.0}, 
   {.mtype = ROT, .amount = 0.0} 
