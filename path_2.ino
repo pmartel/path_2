@@ -225,6 +225,7 @@ ISR(TIMER2_COMPA_vect){
   
 }
 
+#if 0
 ISR(TIMER1_COMPA_vect){//timer1 interrupt 1Hz toggles pin 13 (LED)
 //generates pulse wave of frequency 1Hz/2 = 0.5kHz (takes two cycles for full wave- toggle high then toggle low)
 /*  if (toggle1){
@@ -248,3 +249,4 @@ ISR(TIMER0_COMPA_vect){//timer1 interrupt 8kHz toggles pin 9
     toggle2 = 1;
   } */
 }
+#endif
