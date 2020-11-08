@@ -137,7 +137,7 @@ void setup(){
   pinMode(LEFT_DIR_PIN, OUTPUT);
   pinMode(ENPIN, OUTPUT);
   pinMode(TESTPIN, OUTPUT);
-  freq = 200;
+  freq = 75;  // lower freq == higher speed 75 with my wheels is about 2 ips
  
   cli();//stop interrupts
 
