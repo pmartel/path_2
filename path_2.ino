@@ -23,6 +23,14 @@
 #include <Streaming.h> // This lets Serial use the C++ '<<' operator
 #include <math.h>  //for atan(), atan2()
 
+// for IR Remote controller
+#include "IRremote.h"
+int receiver = 3; // Signal Pin of IR receiver to Arduino Digital Pin 11
+
+/*-----( Declare objects )-----*/
+IRrecv irrecv(receiver);     // create instance of 'irrecv'
+decode_results results;      // create instance of 'decode_results'
+
 #define PHILS_ROBOT
 
 #ifdef JONS_ROBOT
@@ -104,7 +112,7 @@ volatile boolean moveDone;
 #define RIGHT_DIR_PIN   DIRPIN1
 
 /* this is Phil's motor controller wiring 11/5 it will change 
- *  aming other issues, the wiring for the left motor is reversed
+ *  among other issues, the wiring for the left motor is reversed
  *  eventually the code will handdle it
  *  Left Controller Left motor  Right controller  Right Motor
  *    3               blue          3               pink
@@ -207,7 +215,7 @@ void loop(){
   TIMSK2 = 0;
   digitalWrite (ENPIN, HIGH);              // disable drivers
   while (true) {}
-}
+} // loop()
 
 ISR(TIMER2_COMPA_vect){
 /*  if (digitalRead(STEPPIN))
@@ -225,28 +233,45 @@ ISR(TIMER2_COMPA_vect){
   
 }
 
-#if 0
-ISR(TIMER1_COMPA_vect){//timer1 interrupt 1Hz toggles pin 13 (LED)
-//generates pulse wave of frequency 1Hz/2 = 0.5kHz (takes two cycles for full wave- toggle high then toggle low)
-/*  if (toggle1){
-    digitalWrite(13,HIGH);
-    toggle1 = 0;
-  }
-  else{
-    digitalWrite(13,LOW);
-    toggle1 = 1;
-  } 
-}
-  
-ISR(TIMER0_COMPA_vect){//timer1 interrupt 8kHz toggles pin 9
-//generates pulse wave of frequency 8kHz/2 = 4kHz (takes two cycles for full wave- toggle high then toggle low)
-/*  if (toggle2){
-    digitalWrite(9,HIGH);
-    toggle2 = 0;
-  }
-  else{
-    digitalWrite(9,LOW);
-    toggle2 = 1;
-  } */
-}
-#endif
+//functions for IRRemote
+void translateIR() // takes action based on IR code received
+
+// describing Remote IR codes 
+
+{
+
+  switch(results.value)
+
+  {
+  case 0xFFA25D: Serial.println("POWER"); break;
+  case 0xFFE21D: Serial.println("VOL STOP"); break;
+  case 0xFF629D: Serial.println("MODE"); break;
+  case 0xFF22DD: Serial.println("PAUSE");    break;
+  case 0xFF02FD: Serial.println("FAST BACK");    break;
+  case 0xFFC23D: Serial.println("FAST FORWARD");   break;
+  case 0xFFE01F: Serial.println("EQ");    break;
+  case 0xFFA857: Serial.println("VOL-");    break;
+  case 0xFF906F: Serial.println("VOL+");    break;
+  case 0xFF9867: Serial.println("RETURN");    break;
+  case 0xFFB04F: Serial.println("USB SCAN");    break;
+  case 0xFF6897: Serial.println("0");    break;
+  case 0xFF30CF: Serial.println("1");    break;
+  case 0xFF18E7: Serial.println("2");    break;
+  case 0xFF7A85: Serial.println("3");    break;
+  case 0xFF10EF: Serial.println("4");    break;
+  case 0xFF38C7: Serial.println("5");    break;
+  case 0xFF5AA5: Serial.println("6");    break;
+  case 0xFF42BD: Serial.println("7");    break;
+  case 0xFF4AB5: Serial.println("8");    break;
+  case 0xFF52AD: Serial.println("9");    break;
+  case 0xFFFFFFFF: Serial.println(" REPEAT");break;  
+
+  default: 
+    Serial.println(" other button   ");
+
+  }// End Case
+
+  delay(200); // Do not get immediate repeat
+
+
+} //END translateIR
